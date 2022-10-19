@@ -1,0 +1,93 @@
+@startuml
+
+
+
+    interface Board{
+        getTile(Position): Tile
+    }
+    class BoxBoard implements Board{
+    - board: Array<Array<Tile>>
+    `    getTile(position:Position):Tile
+     movePiece(position:Position, piece: Piece)
+    }
+    BoxBoard --o Tile
+    BoxBoard --> Piece
+
+    Board --> Position
+
+    class EmptyTile implements Tile{
+        - color: string
+        hasPiece():Boolean
+        getPiece():Piece
+        getColor()
+    }
+
+    class OccupiedTile implements Tile{
+            - color: string
+            - piece: Piece
+            hasPiece():Boolean
+            getPiece():Piece
+            getColor()
+        }
+        OccupiedTile --* Piece
+
+    interface Position{
+    getPosition(): Array<int>
+    }
+
+    class BoxPosition implements Position{
+        -posX:Int
+        -posY:Int
+        getPosition(): [ posX, posY ]
+    }
+
+    interface Tile{
+    hasPiece():Boolean
+    getPiece():Piece
+    getColor(): string
+    }
+
+    class Movement{
+    - from: Position
+    - to: Position
+    getFrom(): Position
+    getTo(): Position
+    }
+    Movement --* Position
+
+    interface FinishValidator{
+    checkFinish(board:Board): Boolean
+    }
+    FinishValidator --> Board
+
+    interface MovementValidator{
+    validateMove(board:Board, movement:Movement):Boolean
+    }
+    MovementValidator --> Board
+    MovementValidator --> Movement
+
+
+    class Piece{
+    - name: string
+    - color: string
+    - validMovements:List<MovementValidator>
+    movePiece(board:Board,movement:Movement): Piece
+    getName(): string
+    getColor():string
+    }
+    Piece --MovementValidator
+    Piece --> Board
+    Piece --> Movement
+
+    class Game{
+    -board:Board
+    -movements:Stack<Movement>
+    -finishValidators:List<FinishValidator>
+    getBoard()
+    move(movement:Movement)
+    checkWinner():string
+    }
+    Game --* Board
+    Game --o Movement
+
+@enduml
