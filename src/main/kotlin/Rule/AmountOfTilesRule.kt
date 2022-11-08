@@ -1,13 +1,21 @@
 package Rule
 
-import Board.Board
+import Game
 import Move.Move
-import kotlin.math.abs
 
 class AmountOfTilesRule(private val amount: Int) : Rule{
 
-    override fun validate(board: Board, move: Move): Boolean {
-        return ((abs(move.getFrom().getPosX() - move.getTo().getPosX()) + abs(move.getFrom().getPosY() - move.getTo().getPosY())) <= amount)
+    override fun validate(game: Game, move: Move): Boolean {
+
+        return if (move.getFrom().getPosX() == move.getTo().getPosX()){
+            move.getFrom().getPosY() <= move.getTo().getPosY() + amount ||  move.getFrom().getPosY() >= move.getTo().getPosY() - amount
+        }else if (move.getFrom().getPosY() == move.getTo().getPosY()){
+
+            move.getFrom().getPosX() <= move.getTo().getPosX() + amount ||  move.getFrom().getPosX() >= move.getTo().getPosX() - amount
+        }else{
+            (move.getFrom().getPosX() <= move.getTo().getPosX() + amount ||  move.getFrom().getPosX() >= move.getTo().getPosX() - amount) &&
+                    (move.getFrom().getPosY() <= move.getTo().getPosY() + amount ||  move.getFrom().getPosY() >= move.getTo().getPosY() - amount)
+        }
     }
 
 }

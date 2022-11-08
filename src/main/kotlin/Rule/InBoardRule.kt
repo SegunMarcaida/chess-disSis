@@ -1,10 +1,12 @@
 package Rule
 
-import Board.Board
+import Game
 import Move.Move
 
 class InBoardRule: Rule{
-        override fun validate(board: Board, move: Move): Boolean {
+        override fun validate(game: Game, move: Move): Boolean {
+            val board = game.getBoard()
+
             return board.inBounds(move.getFrom()) && board.inBounds(move.getTo())
         }
 

@@ -1,28 +1,33 @@
 import Board.Board
-import FinishValidator.FinishValidator
 import Move.Move
-import java.util.Stack
 
 class Game(private val board: Board) {
-    private val movements = Stack<Move>()
+    private var lastColor = "WHITE"
 
-   fun move(move: Move) {
+   fun move(move: Move):Board {
        if (!board.getTile(move.getFrom()).isOccupied()) throw Exception("Tile is Empty")
-       if(!movements.isEmpty() && board.getTile(move.getFrom()).getPiece().getColor() == board.getTile(movements.peek().getTo()).getPiece().getColor()) throw Exception("Not your turn")
-       board.getTile(move.getFrom()).getPiece().move(board,move)
-       movements.push(move)
+       if( board.getTile(move.getFrom()).getPiece().getColor() == lastColor) throw Exception("Not your turn")
+       val newBoard = board.getTile(move.getFrom()).getPiece().move(this,move)
+       toggleLastColor()
+       return newBoard;
+    }
+
+    private fun toggleLastColor() {
+        if (lastColor == "WHITE") lastColor = "BLACK"
+        else if (lastColor == "BLACK") lastColor = "WHITE"
     }
 
     fun checkWinner():Boolean {
         return TODO("Implement")
     }
 
-    fun getLastMove():Move{
-        return movements.peek()
+
+
+    fun getLastColor(): String {
+       return lastColor
     }
 
-    fun getLastPiece(): Piece {
-       return board.getTile(movements.peek().getTo()).getPiece()
+    fun getBoard(): Board{
+        return board
     }
-
 }

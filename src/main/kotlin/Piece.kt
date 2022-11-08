@@ -1,16 +1,22 @@
 import Board.Board
 import Move.Move
 import Mover.Mover
-import Rule.Rule
 
-class Piece(private val name: String, private val color: String, private val movers: List<Mover>){
+class Piece(private val name: String, private val color: String, private val movers: List<Mover>,private var uniqueId: String? = null
+){
     private var hasMoved: Boolean = false
-
-    fun move(board: Board, move: Move): Board {
+    private val id: String = name.lowercase() + color.lowercase()
+    fun getUniqueId(): String {
+        if (uniqueId.isNullOrBlank()){
+            uniqueId = this.hashCode().toString()
+        }
+        return uniqueId!!
+    }
+    fun move(game: Game, move: Move): Board {
         for(mover in movers) {
-            if(mover.validateMove(board, move)) {
+            if(mover.validateMove(game, move)) {
                 hasMoved = true
-                return mover.move(board,move)
+                return mover.move(game.getBoard(), move);
             }
         }
         throw Exception("Invalid move")

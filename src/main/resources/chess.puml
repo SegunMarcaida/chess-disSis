@@ -31,11 +31,7 @@
         }
         OccupiedTile --* Piece
 
-    interface Position{
-    getPosition(): Array<int>
-    }
-
-    class BoxPosition implements Position{
+    class Position{
         -posX:Int
         -posY:Int
         getPosition(): [ posX, posY ]
@@ -47,47 +43,54 @@
     getColor(): string
     }
 
-    class Movement{
+    class Move{
     - from: Position
     - to: Position
     getFrom(): Position
     getTo(): Position
     }
-    Movement --* Position
+    Move --* Position
 
-    interface FinishValidator{
-    checkFinish(board:Board): Boolean
+    interface Rule{
+    validate(board:Board): Boolean
     }
     FinishValidator --> Board
 
-    interface MovementValidator{
-    validateMove(board:Board, movement:Movement):Boolean
+    interface Rule{
+    validateMove(board:Board, Move:Move):Boolean
     }
-    MovementValidator --> Board
-    MovementValidator --> Movement
+    Rule --> Board
+    Rule --> Move
 
 
     class Piece{
     - name: string
     - color: string
-    - validMovements:List<MovementValidator>
-    movePiece(board:Board,movement:Movement): Piece
+    - Moves:List<Mover>
+    movePiece(board:Board,Move:Move): Piece
     getName(): string
     getColor():string
     }
-    Piece --MovementValidator
+    Piece --Mover
     Piece --> Board
-    Piece --> Movement
+    Piece --> Move
+
+    interface Mover{
+    validateMove(board:Board, Move:Move):Boolean
+    mover(board:Board, Move:Move):Board
+    }
+    Mover -- Rule
+    Move -- Board
 
     class Game{
     -board:Board
-    -movements:Stack<Movement>
+    -Moves:Stack<Move>
     -finishValidators:List<FinishValidator>
     getBoard()
-    move(movement:Movement)
+    move(Move:Move)
     checkWinner():string
     }
     Game --* Board
-    Game --o Movement
+    Game --o Move
 
 @enduml

@@ -7,8 +7,6 @@ import Move.Move
 import Piece
 import PieceGenerator
 import Position.Position
-import Tile.OccupiedTile
-import Tile.Tile
 import edu.austral.dissis.chess.gui.ChessPiece
 import edu.austral.dissis.chess.gui.Move as MoveGui
 import edu.austral.dissis.chess.gui.PlayerColor
@@ -17,7 +15,7 @@ import edu.austral.dissis.chess.gui.Position as PositionGui
 
 class ClassicGame {
     private val pf = PieceGenerator()
-    private val board = generateBoard()
+    private var board = generateBoard()
 
     private fun generateBoard(): Board {
         val board: Board = RectangularBoard(8, 8)
@@ -82,11 +80,12 @@ class ClassicGame {
     fun move(move: MoveGui) {
         val from = Position(move.from.column - 1, move.from.row-1)
         val to = Position(move.to.column - 1, move.to.row-1)
-        game.move(Move(from,to))
+       board = game.move(Move(from,to))
+
     }
 
     fun nextMove(): PlayerColor {
-        return if(game.getLastPiece().getColor() == "Black") {
+        return if(game.getLastColor() == "Black") {
             PlayerColor.WHITE
         }else{
             PlayerColor.BLACK

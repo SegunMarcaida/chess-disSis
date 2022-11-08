@@ -8,7 +8,7 @@ class EmptyTile() : Tile {
     }
 
     override fun getPiece(): Piece {
-        throw Exception("Tile.Tile Is Empty")
+        throw Exception("Tile Is Empty")
     }
 
 

@@ -1,13 +1,15 @@
 package Rule
 
-import Board.Board
+import Game
 import Move.Move
 import Position.Position
 import kotlin.math.abs
 
 class DiagonalClearMoveRule :Rule{
 
-    override fun validate(board: Board, move: Move): Boolean {
+    override fun validate(game: Game, move: Move): Boolean {
+        val board = game.getBoard()
+
         val amountOfTilesX = move.getTo().getPosX() - move.getFrom().getPosX()
         val amountOfTilesY = move.getTo().getPosY() - move.getFrom().getPosY()
         if (amountOfTilesX>0){

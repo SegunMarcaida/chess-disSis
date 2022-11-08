@@ -9,6 +9,7 @@ class CustomGameEngine: GameEngine {
             classicGame.move(move)
             NewGameState(classicGame.pieces(),classicGame.nextMove())
         }catch (e: Exception){
+            println(e.cause)
             InvalidMove(e.message!!)
         }
     }

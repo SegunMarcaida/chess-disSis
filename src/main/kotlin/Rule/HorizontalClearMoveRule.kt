@@ -1,12 +1,14 @@
 package Rule
 
-import Board.Board
+import Game
 import Move.Move
 import Position.Position
 
 class HorizontalClearMoveRule :Rule {
 
-    override fun validate(board: Board, move: Move): Boolean {
+    override fun validate(game: Game, move: Move): Boolean {
+        val board = game.getBoard()
+
         val amountOfTiles = move.getTo().getPosX() - move.getFrom().getPosX()
         if (amountOfTiles>0){
             for (i in 1 until amountOfTiles) {

@@ -6,8 +6,9 @@ import Tile.EmptyTile
 import Tile.OccupiedTile
 import Tile.Tile
 
-class RectangularBoard(private val boardHeight: Int, private val boardWidth: Int) :Board {
-    private val boardArray:Array<Array<Tile>> = Array(boardWidth)  {Array(boardHeight){EmptyTile()}}
+fun RectangularBoard(boardWidth: Int, boardHeight:Int) =RectangularBoard(Array(boardWidth)  {Array(boardHeight){EmptyTile()}})
+
+class RectangularBoard(private val boardArray:Array<Array<Tile>>) :Board {
 
 
     override fun getTile(position: Position): Tile {
@@ -18,20 +19,28 @@ class RectangularBoard(private val boardHeight: Int, private val boardWidth: Int
     }
 
 
-    override fun putAt( position: Position,piece: Piece): Tile {
-        val oldTile = boardArray[position.getPosX()][position.getPosY()]
-        boardArray[position.getPosX()][position.getPosY()] = OccupiedTile(piece)
-        return oldTile
+    override fun putAt( position: Position,piece: Piece): Board {
+        val boardArrayCopy = boardArray.clone()
+        boardArrayCopy[position.getPosX()][position.getPosY()] = OccupiedTile(piece)
+        return RectangularBoard(boardArrayCopy)
+    }
+
+    override fun changeWithPiece(piece: Piece, position: Position): Board {
+        //Because arrays are 0-7
+        val auxBoardArray = boardArray
+        auxBoardArray[position.getPosY()][position.getPosX()] = OccupiedTile(piece)
+        return RectangularBoard(auxBoardArray)
     }
 
     override fun inBounds(position: Position): Boolean {
         return (boardArray.size>= position.getPosX() && boardArray[0].size >= position.getPosY() )
     }
 
-    override fun removePiece(position: Position): Piece {
+    override fun removePiece(position: Position): Board {
         val oldPiece = getTile(position).getPiece()
-        boardArray[position.getPosX()][position.getPosY()] = EmptyTile()
-        return oldPiece
+        val boardArrayCopy = boardArray.clone()
+        boardArrayCopy[position.getPosX()][position.getPosY()] = EmptyTile()
+        return RectangularBoard(boardArrayCopy)
     }
 
     override fun getPieces(): List<Piece> {
@@ -61,5 +70,15 @@ class RectangularBoard(private val boardHeight: Int, private val boardWidth: Int
         throw Exception("no piece")
     }
 
+
+    override fun getNumberOfRows(): Int {
+        return boardArray[0].size
+    }
+
+    override fun changeToEmpty(position: Position): Board {
+        val auxBoardArray = boardArray.clone()
+        auxBoardArray[position.getPosY() ][position.getPosX()] = EmptyTile()
+        return RectangularBoard(auxBoardArray)
+    }
 
 }
