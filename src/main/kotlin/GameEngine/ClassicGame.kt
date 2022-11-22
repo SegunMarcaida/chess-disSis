@@ -1,95 +1,108 @@
-package GameEngine
-
-import Board.Board
 import Board.RectangularBoard
-import Game
-import Move.Move
-import Piece
-import PieceGenerator
+import FinishValidator.CheckMateValidator
+import FinishValidator.FinishValidator
 import Position.Position
-import edu.austral.dissis.chess.gui.ChessPiece
-import edu.austral.dissis.chess.gui.Move as MoveGui
-import edu.austral.dissis.chess.gui.PlayerColor
-import edu.austral.dissis.chess.gui.Position as PositionGui
+import Tile.OccupiedTile
 
+class ClassicGame(
+    private val rectangularBoard: RectangularBoard,
+    private val pieceGenerator: PieceGenerator
+) {
 
-class ClassicGame {
-    private val pf = PieceGenerator()
-    private var board = generateBoard()
-
-    private fun generateBoard(): Board {
-        val board: Board = RectangularBoard(8, 8)
-        board.putAt(Position(0, 0), pf.rook("Black"))
-        board.putAt(Position(0, 1), pf.pawn("Black"))
-        board.putAt(Position(1, 0), pf.knight("Black"))
-        board.putAt(Position(1, 1), pf.pawn("Black"))
-        board.putAt(Position(2, 0), pf.bishop("Black"))
-        board.putAt(Position(2, 1), pf.pawn("Black"))
-        board.putAt(Position(3, 0), pf.king("Black"))
-        board.putAt(Position(3, 1), pf.pawn("Black"))
-        board.putAt(Position(4, 0), pf.queen("Black"))
-        board.putAt(Position(4, 1), pf.pawn("Black"))
-        board.putAt(Position(5, 0), pf.bishop("Black"))
-        board.putAt(Position(5, 1), pf.pawn("Black"))
-        board.putAt(Position(6, 0), pf.knight("Black"))
-        board.putAt(Position(6, 1), pf.pawn("Black"))
-        board.putAt(Position(7, 0), pf.rook("Black"))
-        board.putAt(Position(7, 1), pf.pawn("Black"))
-        board.putAt(Position(0, 6), pf.pawn("White"))
-        board.putAt(Position(0, 7), pf.rook("White"))
-        board.putAt(Position(1, 6), pf.pawn("White"))
-        board.putAt(Position(1, 7), pf.knight("White"))
-        board.putAt(Position(2, 6), pf.pawn("White"))
-        board.putAt(Position(2, 7), pf.bishop("White"))
-        board.putAt(Position(3, 6), pf.pawn("White"))
-        board.putAt(Position(3, 7), pf.king("White"))
-        board.putAt(Position(4, 6), pf.pawn("White"))
-        board.putAt(Position(4, 7), pf.queen("White"))
-        board.putAt(Position(5, 6), pf.pawn("White"))
-        board.putAt(Position(5, 7), pf.bishop("White"))
-        board.putAt(Position(6, 6), pf.pawn("White"))
-        board.putAt(Position(6, 7), pf.knight("White"))
-        board.putAt(Position(7, 6), pf.pawn("White"))
-        board.putAt(Position(7, 7), pf.rook("White"))
-
-        return board
-    }
-
-
-    fun pieces(): List<ChessPiece> {
-        val newPieces = mutableListOf<ChessPiece>()
-        val pieces = board.getPieces()
-        pieces.map { newPieces.add(pieceToUIPiece(it)) }
-        return newPieces
-    }
-
-    private fun pieceToUIPiece(piece: Piece): ChessPiece {
-        return ChessPiece(
-            piece.hashCode().toString(), if (piece.getColor() == "Black") {
-                PlayerColor.BLACK
-            } else {
-                PlayerColor.WHITE
-            }, PositionGui(board.getPiece(piece).getPosY()+1, board.getPiece(piece).getPosX()+ 1), piece.getName().lowercase()
-        )
-    }
-
-
-
-    private val game = Game(board)
-
-    fun move(move: MoveGui) {
-        val from = Position(move.from.column - 1, move.from.row-1)
-        val to = Position(move.to.column - 1, move.to.row-1)
-       board = game.move(Move(from,to))
-
-    }
-
-    fun nextMove(): PlayerColor {
-        return if(game.getLastColor() == "Black") {
-            PlayerColor.WHITE
-        }else{
-            PlayerColor.BLACK
+    companion object Create {
+        fun createFactory(): ClassicGame{
+            return ClassicGame(
+                RectangularBoard(8,8),
+                PieceGenerator()
+            )
         }
+    }
+
+    fun create(): Game {
+        val finishValidators = listOf<FinishValidator>(
+            CheckMateValidator()
+        )
+        val board = rectangularBoard
+       /* for (i in 0..7) {
+            board.putAt(Position(1,i),  pieceGenerator.pawn("1$i", "WHITE"))
+            board.putAt(Position(6,i),  pieceGenerator.pawn("6$i", "BLACK"))
+        }*/
+      /*  board.putAt(
+            Position(0,0),
+            pieceGenerator.rook("00", "WHITE"))
+        board.putAt(
+            Position(0,7),
+             pieceGenerator.rook("07", "WHITE")
+        )
+        board.putAt(
+            Position(0,2),
+              pieceGenerator.bishop("01", "WHITE")
+        )
+        board.putAt(
+            Position(0,5),
+             pieceGenerator.bishop("06", "WHITE")
+        )
+        board.putAt(
+            Position(0,1),
+            pieceGenerator.knight("02", "WHITE")
+        )
+        board.putAt(
+            Position(0,6),
+              pieceGenerator.knight("05", "WHITE")
+        )
+        board.putAt(
+            Position(0,3),
+            pieceGenerator.queen("03", "WHITE")
+        )*/
+        board.putAt(
+            Position(0,5),
+             pieceGenerator.king("04", "WHITE")
+        )
+
+        board.putAt(
+            Position(7,0),
+              pieceGenerator.rook("70", "BLACK")
+        )
+       /* board.putAt(
+            Position(7,7),
+              pieceGenerator.rook("77", "BLACK")
+        )*/
+        /*board.putAt(
+            Position(7,2),
+              pieceGenerator.bishop("71", "BLACK")
+        )*/
+       /* board.putAt(
+            Position(7,5),
+             pieceGenerator.bishop("76", "BLACK")
+        )
+        board.putAt(
+            Position(7,1),
+              pieceGenerator.knight("72", "BLACK")
+        )
+        board.putAt(
+            Position(7,6),
+             pieceGenerator.knight("75", "BLACK")
+        )*/
+        board.putAt(
+            Position(7,3),
+             pieceGenerator.queen("73", "BLACK")
+        )
+        board.putAt(
+            Position(7,4),
+              pieceGenerator.king("74", "BLACK")
+        )
+
+        return Game(
+            finishValidators,
+            GameState(
+                mutableListOf(),
+                board,
+                board.getCopy(),
+                false,
+                "",
+                "BLACK"
+            )
+        )
     }
 
 }

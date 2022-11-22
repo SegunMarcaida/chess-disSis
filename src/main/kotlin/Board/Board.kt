@@ -12,9 +12,10 @@ fun inBounds(position: Position):Boolean
 fun removePiece(position: Position):Board
 fun getPieces():List<Piece>
 fun getPiece(piece: Piece):Position
-fun changeWithPiece(piece: Piece, position: Position): Board
-fun changeToEmpty(position: Position): Board
-
+fun getCopy(): Board
 fun getNumberOfRows(): Int
+fun getNumberOfColumns(): Int
+fun getColorPieces(color: String): List<Piece>
+fun getPositionFromPiece(piece: Piece): Position
 
 }

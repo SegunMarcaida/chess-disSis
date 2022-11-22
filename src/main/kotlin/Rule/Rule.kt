@@ -1,9 +1,8 @@
 package Rule
 
-import Board.Board
-import Game
+import GameState
 import Move.Move
 
 interface Rule {
- fun validate(game: Game, move: Move): Boolean
+ fun validate(gameState: GameState, move: Move): Boolean
 }

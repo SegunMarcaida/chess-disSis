@@ -1,12 +1,12 @@
 package Mover
 
 import Board.Board
-import Game
+import GameState
 import Move.Move
 
 interface Mover {
 
-    fun validateMove(game: Game, move: Move): Boolean
+    fun validateMove(gameState: GameState, move: Move): Boolean
 
     fun move(board: Board, move: Move): Board
 }

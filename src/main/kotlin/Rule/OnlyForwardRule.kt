@@ -1,15 +1,21 @@
 package Rule
 
-import Board.Board
-import Game
+import GameState
 import Move.Move
 
 class OnlyForwardRule(private val color:String):Rule {
-    override fun validate(game: Game, move: Move): Boolean {
-        return if (color == "White"){
+    override fun validate(gameState: GameState, move: Move): Boolean {
+        return if (color == "BLACK"){
+
             (move.getFrom().getPosY()>move.getTo().getPosY())
+
         }else{
-            (move.getFrom().getPosY()<move.getTo().getPosY())
+            if(move.getFrom().getPosY()<move.getTo().getPosY()){
+                true
+            }else{
+                println("Only Forward  mdfqr")
+                false
+            }
 
         }
 

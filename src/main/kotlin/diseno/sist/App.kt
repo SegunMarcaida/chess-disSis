@@ -1,7 +1,7 @@
 package diseno.sist
 
-import GameEngine.ClassicGame
-import GameEngine.CustomGameEngine
+import ClassicGame
+import edu.austral.dissis.chess.engine.CustomGameEngine
 import edu.austral.dissis.chess.gui.CachedImageResolver
 import edu.austral.dissis.chess.gui.DefaultImageResolver
 import edu.austral.dissis.chess.gui.GameView
@@ -17,7 +17,7 @@ fun main() {
 }
 
 class ChessGameApplication : Application() {
-    private val gameEngine = CustomGameEngine()
+    private val gameEngine = CustomGameEngine(ClassicGame.createFactory().create())
     private val imageResolver = CachedImageResolver(DefaultImageResolver())
 
     companion object {

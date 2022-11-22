@@ -1,7 +1,7 @@
 package FinishValidator
 
-import Board.Board
+import GameState
 
 interface FinishValidator {
-    fun checkFinish(board: Board): Boolean
+    fun checkFinish(gameState: GameState): CheckFinishResult
 }

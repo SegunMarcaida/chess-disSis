@@ -6,7 +6,7 @@ import Tile.EmptyTile
 import Tile.OccupiedTile
 import Tile.Tile
 
-fun RectangularBoard(boardWidth: Int, boardHeight:Int) =RectangularBoard(Array(boardWidth)  {Array(boardHeight){EmptyTile()}})
+fun RectangularBoard(boardWidth: Int, boardHeight:Int) = RectangularBoard(Array(boardWidth)  {Array(boardHeight){EmptyTile()}})
 
 class RectangularBoard(private val boardArray:Array<Array<Tile>>) :Board {
 
@@ -25,12 +25,7 @@ class RectangularBoard(private val boardArray:Array<Array<Tile>>) :Board {
         return RectangularBoard(boardArrayCopy)
     }
 
-    override fun changeWithPiece(piece: Piece, position: Position): Board {
-        //Because arrays are 0-7
-        val auxBoardArray = boardArray
-        auxBoardArray[position.getPosY()][position.getPosX()] = OccupiedTile(piece)
-        return RectangularBoard(auxBoardArray)
-    }
+
 
     override fun inBounds(position: Position): Boolean {
         return (boardArray.size>= position.getPosX() && boardArray[0].size >= position.getPosY() )
@@ -70,15 +65,56 @@ class RectangularBoard(private val boardArray:Array<Array<Tile>>) :Board {
         throw Exception("no piece")
     }
 
+    override fun getCopy(): Board {
+        val newBoardArray = Array(8) { arrayOfNulls<Tile>(8) }
+        for (i in boardArray.indices) {
+            for (j in 0 until boardArray[i].size) {
+                val tile = boardArray[i][j]
+                if (tile.isOccupied()) {
+                    newBoardArray[i][j] = OccupiedTile(
+                        tile.getPiece()
+                    )
+                } else {
+                    newBoardArray[i][j] = EmptyTile()
+                }
+            }
+        }
+        return RectangularBoard(
+            newBoardArray as Array<Array<Tile>>
+        )
+    }
+
 
     override fun getNumberOfRows(): Int {
         return boardArray[0].size
     }
 
-    override fun changeToEmpty(position: Position): Board {
-        val auxBoardArray = boardArray.clone()
-        auxBoardArray[position.getPosY() ][position.getPosX()] = EmptyTile()
-        return RectangularBoard(auxBoardArray)
+    override fun getNumberOfColumns(): Int {
+        return boardArray.size
     }
+
+    override fun getColorPieces(color: String): List<Piece> {
+        val pieces = mutableListOf<Piece>()
+        for (i in boardArray.indices) {
+            for (j in 0 until boardArray[i].size) {
+                if(boardArray[i][j].isOccupied() && boardArray[i][j].getPiece().getColor() == color) {
+                    pieces.add(boardArray[i][j].getPiece())
+                }
+            }
+        }
+        return pieces
+    }
+
+    override fun getPositionFromPiece(piece: Piece): Position {
+        for (i in boardArray.indices){
+            for (j in 0 until boardArray[i].size) {
+                if(boardArray[i][j].isOccupied() && boardArray[i][j].getPiece().getId() == piece.getId()) {
+                    return Position(i,j)
+                }
+            }
+        }
+        throw Exception("Not found")
+    }
+
 
 }

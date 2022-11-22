@@ -1,24 +1,36 @@
-package GameEngine
 
+
+package edu.austral.dissis.chess.engine
+
+import Game
+import Position.Position
+import Move.Move as Movement
 import edu.austral.dissis.chess.gui.*
 
-class CustomGameEngine: GameEngine {
-    private val classicGame = ClassicGame()
+
+class CustomGameEngine(
+    private val game: Game
+) : GameEngine{
+
     override fun applyMove(move: Move): MoveResult {
         return try {
-            classicGame.move(move)
-            NewGameState(classicGame.pieces(),classicGame.nextMove())
+            val movement = Movement(
+                Position(move.from.row-1, move.from.column-1),
+                Position(move.to.row-1, move.to.column-1)
+            )
+            game.move(movement)
+            if(game.hasFinished()){
+                GameOver(game.getWinner())
+            } else {
+                NewGameState(game.getChessPieces(),game.getNextPlayer())
+            }
         }catch (e: Exception){
-            println(e.cause)
             InvalidMove(e.message!!)
         }
     }
 
     override fun init(): InitialState {
-        return InitialState(BoardSize(8,8), classicGame.pieces(), PlayerColor.WHITE)
+        val pieces = game.getChessPieces()
+        return InitialState(BoardSize(8,8), pieces, PlayerColor.WHITE)
     }
-
-
-
-
 }

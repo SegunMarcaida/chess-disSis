@@ -2,11 +2,12 @@ package Rule
 
 import GameState
 import Move.Move
+import Position.Position
 
-class IsEmptyRule:Rule {
+class HorizontalMoveRule :Rule {
+
     override fun validate(gameState: GameState, move: Move): Boolean {
-        val board = gameState.getBoard()
+        return move.getFrom().getPosX() == move.getTo().getPosY()
 
-        return !(board.getTile(move.getTo()).isOccupied())
     }
 }

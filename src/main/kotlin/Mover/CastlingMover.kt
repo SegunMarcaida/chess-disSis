@@ -1,14 +1,14 @@
 package Mover
 
 import Board.Board
-import Game
+import GameState
 import Move.Move
 import Position.Position
 import Rule.Rule
 
 class CastlingMover(private val rules: List<Rule>) :Mover{
-    override fun validateMove(game: Game, move: Move): Boolean {
-        return rules.all { it.validate(game, move) }
+    override fun validateMove(gameState: GameState, move: Move): Boolean {
+        return rules.all { it.validate(gameState, move) }
 
     }
 

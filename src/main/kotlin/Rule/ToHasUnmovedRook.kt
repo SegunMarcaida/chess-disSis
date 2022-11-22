@@ -1,11 +1,11 @@
 package Rule
 
-import Game
+import GameState
 import Move.Move
 
 class ToHasUnmovedRook :Rule{
-    override fun validate(game: Game, move: Move): Boolean {
-        val board = game.getBoard()
+    override fun validate(gameState: GameState, move: Move): Boolean {
+        val board = gameState.getBoard()
         val tile = board.getTile(move.getTo())
        return (tile.isOccupied() && tile.getPiece().getName()=="Rook" && !tile.getPiece().getHasMoved())
     }

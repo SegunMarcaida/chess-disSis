@@ -1,11 +1,11 @@
 package Rule
 
-import Game
+import GameState
 import Move.Move
 
 class HasntMoved:Rule {
-    override fun validate(game: Game, move: Move): Boolean {
-        val board = game.getBoard()
+    override fun validate(gameState: GameState, move: Move): Boolean {
+        val board = gameState.getBoard()
 
         return !(board.getTile(move.getFrom()).getPiece().getHasMoved())
     }
